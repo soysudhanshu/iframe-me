@@ -11,9 +11,10 @@ add_shortcode('iframe_me', 'render_iframe_me_shortcode');
 
 function render_iframe_me_shortcode($attributes, $content)
 {
-    $url = $content;
+    $allowed_protocols = ['http', 'https'];
+    $url = esc_url($content, $allowed_protocols);
 
-    if (!filter_var($url, FILTER_VALIDATE_URL)) {
+    if (empty($url)) {
         return <<<HTML
         <div style='color:tomato;
                     padding: 1rem;
@@ -26,6 +27,5 @@ function render_iframe_me_shortcode($attributes, $content)
         HTML;
     }
 
-    $url = esc_attr($url);
     return "<iframe src='$url' height='500'></iframe>";
 }
