@@ -7,25 +7,37 @@
  * Author URI: https://soysudhanshu.com
  */
 
+if(!defined('ABSPATH')){
+    exit('');
+} 
+
+require __DIR__ . '/includes/class-iframe-me-exception.php';
+require __DIR__ . '/includes/class-iframe-me-renderer.php';
+require __DIR__ . '/includes/functions.php';
+
 add_shortcode('iframe_me', 'render_iframe_me_shortcode');
 
 function render_iframe_me_shortcode($attributes, $content)
 {
-    $allowed_protocols = ['http', 'https'];
-    $url = esc_url($content, $allowed_protocols);
+    $url = $content;
+    if(empty($attributes)){
+        $attributes = [];
+    }
 
-    if (empty($url)) {
-        return <<<HTML
-        <div style='color:tomato;
+    try{
+
+        $iframe_renderer = new Iframe_Me_Renderer($url, $attributes);
+        $output = $iframe_renderer->output();
+    }catch(Iframe_Me_Exception $e){
+        $output = "<div style='color:tomato;
                     padding: 1rem;
                     border-radius:7px;
                     box-shadow: 0 0 10px rgba(0,0,0,0.1);
                     background: white'
         >
-            Invalid iFrame URL
-        </div>
-        HTML;
+            {$e->getMessage()}
+        </div>";
     }
 
-    return "<iframe src='$url' height='500'></iframe>";
+    return $output;
 }
