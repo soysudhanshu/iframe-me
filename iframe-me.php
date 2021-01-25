@@ -5,6 +5,8 @@
  * Version: 1.0.0
  * Author: soysudhanshu
  * Author URI: https://soysudhanshu.com
+ * Requires PHP: 7.4
+ * Requires at least: 5.3
  */
 
 if(!defined('ABSPATH')){
