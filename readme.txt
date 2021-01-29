@@ -13,6 +13,11 @@ Easily add iframe with a simple shortcode
 == Description ==
 Add iFrames without writing any HTML!
 
+== Screenshots ==
+1. Classic editor shortcode.
+2. Gutenberg shortcode block.
+3. Shortcode output.
+
 == Changelog ==
 == 1.0.0 ==
 * Initial Release
