@@ -2,7 +2,7 @@
 /**
  * Plugin Name: iFrame Me
  * Description: A simple solution for inserting iFrames.
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: soysudhanshu
  * Author URI: https://soysudhanshu.com
  * Requires PHP: 7.4
