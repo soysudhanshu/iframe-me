@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "@wordpress/scripts": "13.0.2"
+  },
+  "scripts": {
+    "start": "wp-scripts start",
+    "build": "wp-scripts build"
+  }
+}
