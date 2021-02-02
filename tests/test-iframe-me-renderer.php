@@ -54,4 +54,29 @@ class Test_Iframe_Me_Rendered extends WP_UnitTestCase
         $escaped_attribute_found = strpos($output, $expected_output) !== false;
         $this->assertTrue($escaped_attribute_found, 'Attributes not escaped using esc_attr.');
     }
+
+    public function test_class_attribute(){
+        $renderer = new Iframe_Me_Renderer('https://localhost');
+        $output   = $renderer->output();
+        $pattern = "/class='(.|)+'/";
+        $this->assertEquals(1, preg_match($pattern, $output), 'Class attribute not found on iframe');
+
+        $pattern = "/class='iframe-me'/";
+        $this->assertEquals(1, preg_match($pattern, $output), 'Default Class value invalid');
+
+        $renderer = new Iframe_Me_Renderer('https://localhost', [
+            'class' => 'new class'
+        ]);
+        $output   = $renderer->output();
+        $pattern = "/class='.+ new class'/";
+        $this->assertEquals(1, preg_match($pattern, $output), 'Custom class value not reflected in output');
+
+        $renderer = new Iframe_Me_Renderer('https://localhost', [
+            'class' => ' new class '
+        ]);
+        $output   = $renderer->output();
+        $pattern = "/class='.+ new class'/";
+        $this->assertEquals(1, preg_match($pattern, $output), 'Class attribute value not trimmed');
+
+    }
 }

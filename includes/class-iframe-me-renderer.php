@@ -9,7 +9,8 @@ if (!class_exists('Iframe_Me_Renderer')) {
 
         private static array $default_attributes = [
             'height' => '500px',
-            'width'  => '100%'
+            'width'  => '100%',
+            'class'  => 'iframe-me'
         ];
 
         private string $url;
@@ -64,10 +65,28 @@ if (!class_exists('Iframe_Me_Renderer')) {
             $attributes = [
                 'src'    => $this->url,
                 'height' => $this->attributes['height'],
-                'width'  => $this->attributes['width']
+                'width'  => $this->attributes['width'],
+                'class'  => $this->get_iframe_classes()
             ];
 
             return $attributes;
+        }
+
+        /**
+         * iFrame's class attribute value
+         *
+         * @return string
+         */
+        private function get_iframe_classes(): string
+        {
+            $classes = trim($this->attributes['class']);
+            $default_classes = static::$default_attributes['class'];
+
+            if($classes !== $default_classes){
+                $classes = $default_classes . ' ' . $classes;
+            }
+
+            return $classes;
         }
     }
 }
