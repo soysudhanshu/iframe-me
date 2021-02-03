@@ -77,6 +77,62 @@ class Test_Iframe_Me_Rendered extends WP_UnitTestCase
         $output   = $renderer->output();
         $pattern = "/class='.+ new class'/";
         $this->assertEquals(1, preg_match($pattern, $output), 'Class attribute value not trimmed');
+    }
 
+    public function testIdAttributeOutput()
+    {
+        /**
+         * No default ID attribute
+         */
+        $render = new Iframe_Me_Renderer('https://localhost');
+        $output = $render->output();
+        $pattern = '/<iframe.+id=\'.+\'/';
+        $this->assertEquals(
+            0,
+            preg_match($pattern, $output),
+            'ID attribute should not be added by default'
+        );
+
+        /**
+         * No ID attribute with empty value
+         */
+        $render = new Iframe_Me_Renderer('https://localhost', [
+            'id' => ''
+        ]);
+        $output = $render->output();
+        $pattern = '/<iframe.+id=\'.+\'/';
+        $this->assertEquals(
+            0,
+            preg_match($pattern, $output),
+            'ID attribute must not be added with empty value'
+        );
+
+        /**
+         * No id attribute with just whitespace
+         */
+        $render = new Iframe_Me_Renderer('https://localhost', [
+            'id' => '    '
+        ]);
+        $output = $render->output();
+        $pattern = '/<iframe.+id=\'.+\'/';
+        $this->assertEquals(
+            0,
+            preg_match($pattern, $output),
+            'ID attribute must not be added when only containing whitespaces'
+        );
+
+        /**
+         * No id attribute with just whitespace
+         */
+        $render = new Iframe_Me_Renderer('https://localhost', [
+            'id' => '   भालू    '
+        ]);
+        $output = $render->output();
+        $pattern = '/<iframe.+id=\'भालू\'/';
+        $this->assertEquals(
+            1,
+            preg_match($pattern, $output),
+            'ID attribute must be trimmed'
+        );
     }
 }

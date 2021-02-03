@@ -10,7 +10,8 @@ if (!class_exists('Iframe_Me_Renderer')) {
         private static array $default_attributes = [
             'height' => '500px',
             'width'  => '100%',
-            'class'  => 'iframe-me'
+            'class'  => 'iframe-me',
+            'id'     => ''
         ];
 
         private string $url;
@@ -25,7 +26,7 @@ if (!class_exists('Iframe_Me_Renderer')) {
             }
 
             $this->url        = $url;
-            $this->attributes = shortcode_atts(static::$default_attributes, $attributes);
+            $this->attributes = $this->sanitize_attributes($attributes);
         }
 
         /**
@@ -69,6 +70,10 @@ if (!class_exists('Iframe_Me_Renderer')) {
                 'class'  => $this->get_iframe_classes()
             ];
 
+            if(!empty($this->attributes['id'])){
+                $attributes['id'] = $this->attributes['id'];
+            }
+
             return $attributes;
         }
 
@@ -87,6 +92,14 @@ if (!class_exists('Iframe_Me_Renderer')) {
             }
 
             return $classes;
+        }
+
+        private function sanitize_attributes(array $attributes): array
+        {
+            $attributes = shortcode_atts(static::$default_attributes, $attributes);
+            $attributes['id'] = trim($attributes['id']);
+
+            return $attributes;
         }
     }
 }
