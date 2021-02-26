@@ -14,6 +14,7 @@ if(!defined('ABSPATH')){
 } 
 
 require __DIR__ . '/includes/class-iframe-me-exception.php';
+require __DIR__ . '/includes/class-iframe-me-request-exception.php';
 require __DIR__ . '/includes/class-iframe-me-renderer.php';
 require __DIR__ . '/includes/functions.php';
 

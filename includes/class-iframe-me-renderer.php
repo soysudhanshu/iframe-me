@@ -35,7 +35,25 @@ if (!class_exists('Iframe_Me_Renderer')) {
          */
         public function output(): string
         {
+            $this->verify_remote_response();
             return $this->generate_iframe_html();
+        }
+
+        private function verify_remote_response()
+        {
+            $request = wp_remote_get($this->url);
+
+            if (is_wp_error($request)) {
+                $message = $request->get_error_message();
+                throw new Iframe_Me_Request_Exception($message);
+            }
+
+            $status_code = wp_remote_retrieve_response_code($request);
+
+            if ($status_code >= 300) {
+                $message = __('Page returned unsuccessful error code.', 'iframe-me');
+                throw new Iframe_Me_Request_Exception($message);
+            }
         }
 
         public function generate_iframe_html(): string

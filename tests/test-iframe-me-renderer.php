@@ -3,6 +3,13 @@
 class Test_Iframe_Me_Rendered extends WP_UnitTestCase
 {
 
+    public function setUp(): void
+    {
+        add_filter('pre_http_request', function () {
+            return [];
+        });
+    }
+
     public function test_iframe_me_empty_url_init()
     {
         $this->expectException(Iframe_Me_Exception::class);
@@ -77,6 +84,49 @@ class Test_Iframe_Me_Rendered extends WP_UnitTestCase
         $output   = $renderer->output();
         $pattern = "/class='.+ new class'/";
         $this->assertEquals(1, preg_match($pattern, $output), 'Class attribute value not trimmed');
+    }
 
+    public function test_throws_exception_when_return_request_returns_wp_error()
+    {
+        $this->expectException(Iframe_Me_Request_Exception::class);
+
+        add_filter('pre_http_request', function () {
+            return new WP_Error();
+        });
+
+        $renderer = new Iframe_Me_Renderer('https://example.com');
+        $renderer->output();
+    }
+
+    public function test_throws_exception_when_request_returns_4xx_status_code()
+    {
+        $this->expectException(Iframe_Me_Request_Exception::class);
+
+        add_filter('pre_http_request', function () {
+            return [
+                'response' => [
+                    'code' => 400
+                ]
+            ];
+        });
+
+        $renderer = new Iframe_Me_Renderer('https://example.com');
+        $renderer->output();
+    }
+
+    public function test_throws_iframe_me_request_exception_on_500_status_code()
+    {
+        $this->expectException(Iframe_Me_Request_Exception::class);
+
+        add_filter('pre_http_request', function () {
+            return [
+                'response' => [
+                    'code' => 505
+                ]
+            ];
+        });
+
+        $renderer = new Iframe_Me_Renderer('https://example.com');
+        $renderer->output();
     }
 }
